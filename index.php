@@ -106,77 +106,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="index.php" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-book"></i>
               <p>
-                master 
+                Akademik
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="index.php?page=mata-pelajaran" class="nav-link active">
+                <a href="index.php?page=mapel" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>mata pelajaran</p>
+                  <p>Mata Pelajaran</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="index.php?page=guru" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>guru</p>
+                  <p>Guru</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="index.php?page=kelas" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kelas</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Data Siswa
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="index.php?page=siswa" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Siswa</p>
                 </a>
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                transaksi
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>jadwal</p>
-                </a>
-                
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>siswa</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>kelas</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="logout.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    logout
-                  </p>
-                </a>
-              </li>
-            </ul>
-          </li>
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
+            <a href="logout.php" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>Logout</p>
             </a>
           </li>
-        </ul>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
