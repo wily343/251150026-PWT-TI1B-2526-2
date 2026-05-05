@@ -145,7 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Data Siswa
+                DATA siswa
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -154,6 +154,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="index.php?page=siswa" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="index.php?page=ekstrakurikuler" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ekstrakurikuler</p>
                 </a>
               </li>
             </ul>
