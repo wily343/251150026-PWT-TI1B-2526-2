@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0">Data Kelas</h1>
+        <h1 class="m-0">Data Informasi</h1>
       </div>
     </div>
   </div>
@@ -10,17 +10,25 @@
 
 <?php
 require_once __DIR__ . "/../config/koneksi.php";
-if(isset($_GET['action']) && isset($_GET['Id'])) {
-    if($_GET['action'] == "hapus") {
-        $Id =$_GET['Id'];
-        $query = mysqli_query($koneksi, "DELETE FROM kelas WHERE Id_kelas ='$Id'");
-        if ($query) {
-            echo '
-            <div class="alert alert-warning alert-dismissible">
-            Berhasil di hapus</div>';
-            echo '<meta http-equiv="refresh" content="1;url=index.php?page=kelas">';
-        }
+if (isset($_GET['action']) && $_GET['action'] == "hapus") {
+    $Id = '';
+    if (isset($_GET['Kd'])) {
+        $Id = $_GET['Kd'];
+    } elseif (isset($_GET['Id'])) {
+        $Id = $_GET['Id'];
     }
+
+    $query = mysqli_query($koneksi, "DELETE FROM kelas WHERE id_kelas='$Id'");
+
+if ($query) {
+    echo "<script>
+            alert('Data berhasil dihapus');
+            window.location='index.php?page=kelas';
+          </script>";
+    exit;
+} else {
+    die(mysqli_error($koneksi));
+}
 }
 ?>
 <div class="content">
@@ -37,29 +45,34 @@ if(isset($_GET['action']) && isset($_GET['Id'])) {
                             <th>Aksi</th>
                         </tr>
                     </thead>
+                    <tbody>
                     <?php
                     $no = 0;
                     $query = mysqli_query($koneksi, "SELECT * FROM kelas");
                     while ($result = mysqli_fetch_array($query) ) {
                         $no++;
                     ?>
-                        <tbody>
-                            <tr>
-                                <td><?= $no;?></td>
-                                <td><?=$result['Id_kelas']; ?></td>
-                                <td><?=$result['Nm_kelas']; ?></td>
-                                <td>
-                                    <a href="index.php?page=kelas&action=hapus&Id=<?= $result['Id_kelas']?>" title="">
-                                        <span class="badge badge-danger">Hapus</span></a>
-                                    <a href ="index.php?page=edit_kelas&Id=<?= $result['Id_kelas']?>" title="">
-                                        <span class="badge badge-warning">Edit</span></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <?php } ?>
+                        <tr>
+                            <td><?= $no;?></td>
+                            <td><?=$result['id_kelas']; ?></td>
+                            <td><?=$result['nm_kelas']; ?></td>
+                            <td>
+                               <a href="index.php?page=kelas&action=hapus&Kd=<?= $result['id_kelas']; ?>"
+                              class="btn btn-danger btn-sm"
+                                  onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                      Hapus
+                                </a>
+                                <a href="index.php?page=edit_kelas&Kd=<?= $result['id_kelas']?>" title="">
+                                    <span class="badge badge-warning">Edit</span>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+</div>  
 </div>  

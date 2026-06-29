@@ -4,7 +4,7 @@
       <div class="col-sm-6">
         <h1 class="m-0">Data Guru</h1>
       </div>
-    </div>
+    </div> 
   </div>
 </div>
 
@@ -32,14 +32,13 @@ if(isset($_GET['action'])) {
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>id guru</th>
-                            <th>nip</th>
-                            <th>nama_guru</th>
-                            <th>jenis_kelamin</th>
+                            <th>kode guru</th>
+                            <th>nama guru</th>
+                            <th>jenis kelamin</th>
+                            <th>pendidikan terakhir</th>
+                            <th>nomor hp</th>
                             <th>alamat</th>
-                            <th>no_hp</th>
-                            <th>email</th>
-                            <th>Aksi</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -51,19 +50,19 @@ if(isset($_GET['action'])) {
                     ?>
                         <tr>
                             <td><?= $no;?></td>
-                            <td><?=$result['id_guru']; ?></td>
-                            <td><?=$result['nip']; ?></td>
-                            <td><?=$result['nama_guru']; ?></td>
-                            <td><?=$result['jenis_kelamin']; ?></td>
+                            <td><?=$result['kd_guru']; ?></td>
+                            <td><?=$result['nm_guru']; ?></td>
+                            <td><?=$result['jenkel']; ?></td>
+                            <td><?=$result['pend_terakhir']; ?></td>
+                            <td><?=$result['hp']; ?></td>
                             <td><?=$result['alamat']; ?></td>
-                            <td><?=$result['no_hp']; ?></td>
-                            <td><?=$result['email']; ?></td>
+                             <td>
                             <td>
-                            <td>
-                                <a href="index.php?page=guru&action=hapus&Kd=<?= $result['Kd_guru']?>" title="">
-                                    <span class="badge badge-danger">Hapus</span></a>
-                                <a href ="index.php?page=edit_guru&Kd=<?= $result['Kd_guru']?>" title="">
-                                    <span class="badge badge-warning">Edit</span></a>
+                                    <a href="index.php?page=guru&action=hapus&Kd=<?= $result['kd_guru']?>" title="">
+                                        <span class="badge badge-danger">Hapus</span></a>
+                                    <a href ="index.php?page=edit_guru&Kd=<?= $result['kd_guru']?>" title="">
+                                        <span class="badge badge-warning">Edit</span></a>
+
                             </td>
                         </tr>
                     <?php } ?>

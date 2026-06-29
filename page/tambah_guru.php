@@ -1,92 +1,120 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Data Guru</h1>
-        </div>
-        </div>
-    </div>
-    </div>
-    <?php
-    require_once __DIR__ . "/../config/koneksi.php";
-    //kode otomatis
-    $carikode = mysqli_query($koneksi, "select max(Kd_guru) from guru") or die (mysqli_error());
-    $datakode = mysqli_fetch_array($carikode);
-    if ($datakode) {
-        $nilaikode = substr($datakode[0], 2);
-        $kode = (int) $nilaikode;
-        $kode = $kode + 1;
-        $hasilkode = "G".str_pad($kode, 3, "0", STR_PAD_LEFT);
-    } else {$hasilkode = "G-"; }
-    $_SESSION["KODE"] = $hasilkode;
-
-    if(isset($_POST['tambah'])){
-        $Kd_guru = $_POST['Kd_guru'];
-        $Id_guru = $_POST['Id_guru'];
-        $Nm_guru = $_POST['Nm_guru'];
-        $Jenkel = $_POST['Jenkel'];
-        $Pend_terakhir = $_POST['Pend_terakhir'];
-        $Hp = $_POST['Hp'];
-        $Alamat = $_POST['Alamat'];
-
-        $insert = mysqli_query($koneksi, "INSERT INTO guru values ('$Kd_guru', '$Id_guru', '$Nm_guru', '$Jenkel', '$Pend_terakhir', '$Hp', '$Alamat')");
-        if($insert){
-            echo '<div class="alert alert-info-dismissible">
-            <button type="button" class="close" data-dismiss="alert"aria-hidden="true">X</button>
-            <h5><i class="icon fas fa-info"></i> Info </h5>
-            <h4>Berhasil Disimpan</h4></div>';
-            echo '<meta http-equiv="refresh" content="1;url=index.php?page=guru">';
-        }else {
-           echo '<div class="alert alert-warning-dismissible">
-           <button type="button" class="close" data-dismiss="alert"aria-hidden="true">X</button>
-           <h5><i class="icon fas fa-info"></i> Info </h5>
-           <h4>Gagal Disimpan</h4></div>';
-        }
-    }
-    ?>
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-body p-2">
-                        <form method="POST" action="">
-                            <div class="form-group">
-                                <label for="Kd_guru">Kode Guru</label>
-                                <input type="text" name="Kd_guru" value="<?=$hasilkode; ?>" placeholder="Kode Guru" class="form-control" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="Id_guru">Id Guru</label>
-                                <input type="text" name="Id_guru" id="Id_guru" placeholder="Id Guru" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="Nm_guru">Nama Guru</label>
-                                <input type="text" name="Nm_guru" id="Nm_guru" placeholder="Nama Guru" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="Jenkel">Jenis Kelamin</label>
-                                <select name="Jenkel" id="Jenkel" class="form-control">
-                                    <option value="">Pilih Jenis Kelamin</option>
-                                    <option value="Laki-laki">Laki-laki</option>
-                                    <option value="Perempuan">Perempuan</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="Pend_terakhir">Pendidikan Terakhir</label>
-                                <input type="text" name="Pend_terakhir" id="Pend_terakhir" placeholder="Pendidikan Terakhir" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="Hp">Nomor Hp</label>
-                                <input type="text" name="Hp" id="Hp" placeholder="Nomor Hp" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="Alamat">Alamat</label>
-                                <textarea name="Alamat" id="Alamat" placeholder="Alamat" class="form-control"></textarea>
-                            </div>
-                            <div class="card-footer">
-                                <input type="submit" class="btn btn-primary" name="tambah" value="simpan">
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Tambah Data Guru</h1>
             </div>
         </div>
+    </div>
+</div>
+
+<?php
+if (isset($_POST['tambah'])) {
+
+    $Kd_guru       = $_POST['Kd_guru'];
+    $Nm_guru       = $_POST['Nm_guru'];
+    $Jenkel        = $_POST['Jenkel'];
+    $Pend_terakhir = $_POST['Pend_terakhir'];
+    $Hp            = $_POST['Hp'];
+    $Alamat        = $_POST['Alamat'];
+
+    $insert = mysqli_query($koneksi, "
+        INSERT INTO guru
+        (Kd_guru, Nm_guru, Jenkel, Pend_terakhir, Hp, Alamat)
+        VALUES
+        ('$Kd_guru','$Nm_guru','$Jenkel','$Pend_terakhir','$Hp','$Alamat')
+    ") or die(mysqli_error($koneksi));
+
+    $insertusers = mysqli_query($koneksi, "
+        INSERT INTO users
+        (Username, Password, Role)
+        VALUES
+        ('$Kd_guru','1234','guru')
+    ") or die(mysqli_error($koneksi));
+
+    if ($insert) {
+        echo '
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h5><i class="icon fas fa-check"></i> Berhasil</h5>
+            Data Guru berhasil disimpan.
+        </div>';
+
+        echo '<meta http-equiv="refresh" content="1;url=index.php?page=guru">';
+    } else {
+        echo '
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h5><i class="icon fas fa-times"></i> Gagal</h5>
+            Data Guru gagal disimpan.
+        </div>';
+    }
+}
+?>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <h3 class="card-title">Form Tambah Data Guru</h3>
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST" action="">
+
+                    <div class="form-group">
+                        <label>Kode Guru</label>
+                        <input type="text" name="Kd_guru" class="form-control" placeholder="Masukkan Kode Guru" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama Guru</label>
+                        <input type="text" name="Nm_guru" class="form-control" placeholder="Masukkan Nama Guru" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <select name="Jenkel" class="form-control" required>
+                            <option value="">-- Pilih Jenis Kelamin --</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pendidikan Terakhir</label>
+                        <select name="Pend_terakhir" class="form-control" required>
+                            <option value="">-- Pilih Pendidikan --</option>
+                            <option value="SMA">SMA</option>
+                            <option value="D3">D3</option>
+                            <option value="S1">S1</option>
+                            <option value="S2">S2</option>
+                            <option value="S3">S3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>No HP</label>
+                        <input type="text" name="Hp" class="form-control" placeholder="Masukkan Nomor HP" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <textarea name="Alamat" rows="4" class="form-control" placeholder="Masukkan Alamat" required></textarea>
+                    </div>
+
+                    <button type="submit" name="tambah" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+
+                    <a href="index.php?page=guru" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>

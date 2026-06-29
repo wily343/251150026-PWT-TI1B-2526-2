@@ -113,10 +113,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-book"></i>
+            <a href="" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Akademik
+                master
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -126,6 +126,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <i class="far fa-circle nav-icon"></i>
                   <p>Mata Pelajaran</p>
                 </a>
+                </li>
+              <li class="nav-item">
+                <a href="index.php?page=siswa" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>siswa</p>
+                </a>
+
               </li>
               <li class="nav-item">
                 <a href="index.php?page=guru" class="nav-link">
@@ -140,20 +147,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                DATA siswa
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
+         
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="index.php?page=siswa" class="nav-link">
+                <a href="index.php?page=jadwal" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Siswa</p>
+                  <p>Jadwal</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -264,4 +263,4 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 </body>
-</html>
+</html> 

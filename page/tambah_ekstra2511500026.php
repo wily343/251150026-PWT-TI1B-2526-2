@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $semester = mysqli_real_escape_string($koneksi, $_POST['semester026']);
     $tahun = mysqli_real_escape_string($koneksi, $_POST['tahun_ajaran026']);
 
-    $insert = mysqli_query($koneksi, "INSERT INTO ekstra_2511500026 (nama_ekstra026, ket026, semester026, tahun_ajaran026) VALUES ('$nama', '$ket', '$semester', '$tahun')");
+    $insert = mysqli_query($koneksi, "INSERT INTO  ekstra_2511500026 (nama_ekstra026, ket026, semester026, tahun_ajaran026) VALUES ('$nama', '$ket', '$semester', '$tahun')");
     if($insert) {
         echo '<div class="alert alert-success">Berhasil ditambahkan</div>';
         echo '<meta http-equiv="refresh" content="1;url=index.php?page=ekstra_2511500026">';

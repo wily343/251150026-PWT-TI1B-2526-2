@@ -9,7 +9,6 @@
 </div>
 
 <?php
-require_once __DIR__ . "/../config/koneksi.php";
 if(isset($_GET['action'])) {
     if($_GET['action'] == "hapus") {
         $Nis =$_GET['Nis'];
@@ -29,36 +28,36 @@ if(isset($_GET['action'])) {
             <div class="card-body">
                 <a href="index.php?page=tambah_siswa" class="btn btn-primary btn-sm">Tambah Siswa</a>
                 <table class="table table-striped">
-                    <thead>
+                    <tread>
                         <tr>
                             <th>No</th>
                             <th>Nis</th>
                             <th>Nama Siswa</th>
-                            <th>Jenis Kelamin</th>
+                            <th>jenis kelamin</th>
                             <th>Hp</th>
                             <th>Id Kelas</th>
                             <th>Aksi</th>
                         </tr>
-                    </thead>
+                    </tread>
                     <?php
                     $no = 0;
                     $query = mysqli_query($koneksi, "SELECT * FROM siswa");
                     while ($result = mysqli_fetch_array($query) ) {
-                        $no++;
+                        $no++
                     ?>
                         <tbody>
                             <tr>
                                 <td><?= $no;?></td>
-                                <td><?=$result['Nis']; ?></td>
-                                <td><?=$result['Nm_siswa']; ?></td>
-                                <td><?=$result['Jenkel']; ?></td>
-                                <td><?=$result['Hp']; ?></td>
-                                <td><?=$result['Id_kelas']; ?></td>
+                                <td><?=$result['nis']; ?></td>
+                                <td><?=$result['nm_siswa']; ?></td>
+                                <td><?=$result['jenkel']; ?></td>
+                                <td><?=$result['hp']; ?></td>
+                                <td><?=$result['id_kelas']; ?></td>
 
                                 <td>
-                                    <a href="index.php?page=siswa&action=hapus&Nis=<?= $result['Nis']?>" title="">
+                                    <a href="index.php?page=siswa&action=hapus&Nis=<?= $result['nis']?>" title="">
                                         <span class="badge badge-danger">Hapus</span></a>
-                                    <a href ="index.php?page=edit_siswa&Nis=<?= $result['Nis']?>" title="">
+                                    <a href ="index.php?page=edit_siswa&Nis=<?= $result['nis']?>" title="">
                                         <span class="badge badge-warning">Edit</span></a>
                                 </td>
                             </tr>

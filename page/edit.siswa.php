@@ -9,8 +9,7 @@
 </div>
 
 <?php
-session_start();
-require_once("../config/koneksi.php");
+
 $Nis = $_GET['Nis'];
 $edit = mysqli_fetch_array(mysqli_query($koneksi, "SELECT * FROM siswa WHERE Nis='$Nis'"));
 

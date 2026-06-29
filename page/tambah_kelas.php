@@ -8,10 +8,10 @@
     </div>
     </div>
     <?php
-    session_start();
-    require_once("../config/koneksi.php");
+   require_once __DIR__ . "/../config/koneksi.php";
+   
     //kode otomatis
-    $carikode = mysqli_query($koneksi, "select max(Id_kelas) from kelas") or die (mysqli_error());
+    $carikode = mysqli_query($koneksi, "select max(id_kelas) from kelas") or die (mysqli_error());
     $datakode = mysqli_fetch_array($carikode);
     if ($datakode[0] != null) {
         $kode = (int) $datakode[0];
@@ -21,10 +21,10 @@
     $_SESSION["KODE"] = $hasilkode;
 
     if(isset($_POST['tambah'])){
-        $Id_kelas = $_POST['Id_kelas'];
-        $Nm_kelas = $_POST['Nm_kelas'];
+        $id_kelas = mysqli_real_escape_string($koneksi, $_POST['id_kelas']);
+        $nm_kelas = mysqli_real_escape_string($koneksi, $_POST['nm_kelas']);
 
-        $insert = mysqli_query($koneksi, "INSERT INTO kelas values ('$Id_kelas', '$Nm_kelas')");
+       $insert = mysqli_query($koneksi, "INSERT INTO kelas (id_kelas, nm_kelas) VALUES ('$id_kelas', '$nm_kelas')");
         if($insert){
             echo '<div class="alert alert-info-dismissible">
             <button type="button" class="close" data-dismiss="alert"aria-hidden="true">X</button>
@@ -46,15 +46,18 @@
                     <div class="card-body p-2">
                         <form method="POST" action="">
                             <div class="form-group">
-                                <label for="Id_kelas">Id Kelas</label>
-                                <input type="text" name="Id_kelas" value="<?=$hasilkode; ?>" placeholder="Id Kelas" class="form-control" readonly>
+                                <label for="id_kelas">Id Kelas</label>
+                                <input type="text" name="id_kelas" value="<?=$hasilkode; ?>" placeholder="id Kelas" class="form-control" readonly>
                             </div>
-                            <div class="form-group">
-                                <label for="Nm_kelas">Nama Kelas</label>
-                                <input type="text" name="Nm_kelas" id="Nm_kelas" placeholder="Nama Kelas" class="form-control">
-                            </div>
+                            
+                             <div class="form-group">
+                        <label>Nama kelas</label>
+                        <input type="text" name="nm_kelas" class="form-control" placeholder="Masukkan Nama kelas" required>
+                    </div>
+                
                             <div class="card-footer">
                                 <input type="submit" class="btn btn-primary" name="tambah" value="simpan">
+
                             </div>
                         </form>
                     </div>
