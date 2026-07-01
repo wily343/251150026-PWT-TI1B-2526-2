@@ -62,7 +62,7 @@ if(isset($_POST['tambah'])){
                     <div class="form-group">
                         <label>Kode Mapel</label>
                         <input type="text"
-                               name="kd_mapel"
+                               name="Kd_mapel"
                                class="form-control"
                                value="<?= $edit['kd_mapel']; ?>"
                                required>

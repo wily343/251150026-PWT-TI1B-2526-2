@@ -23,29 +23,105 @@
         $hasilkode = "123001";
     }
 
-    if (isset($_POST['tambah'])) {
-        $nis = mysqli_real_escape_string($koneksi, $_POST['nis']);
-        $nm_siswa = mysqli_real_escape_string($koneksi, $_POST['nm_siswa']);
-        $jenkel = mysqli_real_escape_string($koneksi, $_POST['jenkel']);
-        $hp = mysqli_real_escape_string($koneksi, $_POST['hp']);
-        $id_kelas = mysqli_real_escape_string($koneksi, $_POST['id_kelas']);
+   if (isset($_POST['tambah'])) {
 
-        $insert = mysqli_query($koneksi, "INSERT INTO siswa (nis, nm_siswa, jenkel, hp, id_kelas) VALUES ('$nis', '$nm_siswa', '$jenkel', '$hp', '$id_kelas')");
+    $nis       = mysqli_real_escape_string($koneksi, $_POST['nis']);
+    $nm_siswa  = mysqli_real_escape_string($koneksi, $_POST['nm_siswa']);
+    $jenkel    = mysqli_real_escape_string($koneksi, $_POST['jenkel']);
+    $hp        = mysqli_real_escape_string($koneksi, $_POST['hp']);
+    $id_kelas  = mysqli_real_escape_string($koneksi, $_POST['id_kelas']);
 
-        if ($insert) {
-            echo '<div class="alert alert-info alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">X</button>
-            <h5><i class="icon fas fa-info"></i> Info </h5>
-            <h4>Berhasil Disimpan</h4></div>';
-            echo '<meta http-equiv="refresh" content="1;url=index.php?page=siswa">';
-        } else {
-            echo '<div class="alert alert-warning alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">X</button>
-            <h5><i class="icon fas fa-info"></i> Info </h5>
-            <h4>Gagal Disimpan</h4></div>';
+    // Cek apakah NIS sudah digunakan
+    $cek = mysqli_query($koneksi, "SELECT * FROM siswa WHERE nis='$nis'");
+
+    if (mysqli_num_rows($cek) > 0) {
+
+        echo '
+        <div class="alert alert-danger">
+            NIS sudah digunakan.
+        </div>';
+
+    } else {
+
+        mysqli_begin_transaction($koneksi);
+
+        try {
+
+            // Simpan ke tabel siswa
+            $insert = mysqli_query($koneksi, "
+                INSERT INTO siswa
+                (
+                    nis,
+                    nm_siswa,
+                    jenkel,
+                    hp,
+                    id_kelas
+                )
+                VALUES
+                (
+                    '$nis',
+                    '$nm_siswa',
+                    '$jenkel',
+                    '$hp',
+                    '$id_kelas'
+                )
+            ");
+
+            if (!$insert) {
+                throw new Exception(mysqli_error($koneksi));
+            }
+
+            // Password default
+            $password = password_hash("1234", PASSWORD_DEFAULT);
+
+            // Simpan akun login
+            $insertUser = mysqli_query($koneksi, "
+                INSERT INTO users
+                (
+                    username,
+                    password,
+                    role
+                )
+                VALUES
+                (
+                    '$nis',
+                    '$password',
+                    'siswa'
+                )
+            ");
+
+            if (!$insertUser) {
+                throw new Exception(mysqli_error($koneksi));
+            }
+
+            mysqli_commit($koneksi);
+
+            echo '
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <h5><i class="icon fas fa-check"></i> Berhasil</h5>
+                Data siswa berhasil disimpan.<br>
+                Username : <b>'.$nis.'</b><br>
+                Password : <b>1234</b>
+            </div>';
+
+            echo '<meta http-equiv="refresh" content="2;url=index.php?page=siswa">';
+
+        } catch (Exception $e) {
+
+            mysqli_rollback($koneksi);
+
+            echo '
+            <div class="alert alert-danger">
+                '.$e->getMessage().'
+            </div>';
+
         }
+
     }
-    ?>
+
+}
+?>
     <section class="content">
         <div class="container-fluid">
             <div class="card">
@@ -72,14 +148,23 @@
                                 <input type="text" name="hp" id="hp" placeholder="No hp" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="id_kelas">Id Kelas</label>
-                                <input type="text" name="id_kelas" id="id_kelas" placeholder="id Kelas" class="form-control">
-                            </div>
-                            <div class="card-footer">
-                                <input type="submit" class="btn btn-primary" name="tambah" value="simpan">
+                    <label>Kelas</label>
+    <select name="id_kelas" class="form-control" required>
+        <option value="">-- Pilih Kelas --</option>
+        <?php
+        $kelas = mysqli_query($koneksi,"SELECT * FROM kelas ORDER BY nm_kelas ASC");
+        while($k = mysqli_fetch_assoc($kelas)){
+            echo "<option value='".$k['id_kelas']."'>".$k['nm_kelas']."</option>";
+       
+            }
+        ?>
+    </select>
+</div>
+                            <div class="form-group">
+                                <button type="submit" name="tambah" class="btn btn-primary">Simpan</button>
+                                <a href="index.php?page=siswa" class="btn btn-secondary">Batal</a>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>

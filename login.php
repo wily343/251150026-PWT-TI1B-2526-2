@@ -2,48 +2,95 @@
 session_start();
 require_once "config/koneksi.php";
 
-if (isset($_SESSION['Username'])) {
-    header('Location: index.php');
+if (isset($_SESSION['username'])) {
+
+    switch ($_SESSION['level']) {
+
+        case 'guru':
+            header("Location: guru/index.php");
+            break;
+
+        case 'siswa':
+            header("Location: siswa/index.php");
+            break;
+
+        default:
+            header("Location: index.php");
+            break;
+    }
+
     exit;
 }
 
-$err = '';
+$err = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $Username = trim($_POST['username'] ?? '');
-    $Password = trim($_POST['password'] ?? '');
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    if ($Username === '' || $Password === '') {
-        $err = "Data tidak boleh kosong.";
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+
+    if ($username == "" || $password == "") {
+
+        $err = "Username dan Password tidak boleh kosong.";
+
     } else {
-        // ✅ SESUAIKAN NAMA FIELD
-        $sql = "SELECT * FROM admin WHERE username = ? LIMIT 1";
-        $stmt = mysqli_prepare($koneksi, $sql);
 
-        if (!$stmt) {
-            $err = "Error: " . mysqli_error($koneksi);
-        } else {
-            mysqli_stmt_bind_param($stmt, "s", $Username);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $user = mysqli_fetch_assoc($result);
-            mysqli_stmt_close($stmt);
+        $stmt = mysqli_prepare($koneksi,"
+            SELECT *
+            FROM users
+            WHERE username=?
+            LIMIT 1
+        ");
 
-            if ($user) {
-                // ✅ CEK PASSWORD PLAINTEXT
-                if ($Password === $user['password']) {
-                    $_SESSION['level'] = 'admin';
-                    $_SESSION['Username'] = $user['username'];
-                    header('Location: index.php');
-                    exit;
-                } else {
-                    $err = "Password salah.";
+        mysqli_stmt_bind_param($stmt,"s",$username);
+
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
+        $user = mysqli_fetch_assoc($result);
+
+        mysqli_stmt_close($stmt);
+
+        if($user){
+
+              if($password == $user['password']){
+                $_SESSION['id_user']  = $user['id_user'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['level']    = $user['role'];
+
+                switch($user['role']){
+
+                    case "admin":
+                        header("Location:index.php");
+                        break;
+
+                    case "guru":
+                        header("Location:guru/index.php");
+                        break;
+
+                    case "siswa":
+                        header("Location:siswa/index.php");
+                        break;
+
                 }
-            } else {
-                $err = "Username tidak ditemukan.";
+
+                exit;
+
+            }else{
+
+                $err = "Password salah.";
+
             }
+
+        }else{
+
+            $err = "Username tidak ditemukan.";
+
         }
+
     }
+
 }
 ?>
 <!DOCTYPE html>
@@ -51,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login Admin</title>
+<title>Login Sistem Akademik</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
@@ -59,10 +106,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="hold-transition login-page">
   <div class="login-box">
-    <div class="login-logo"><a href="#"><b>Admin</b>Panel</a></div>
-    <div class="card">
+<div class="login-logo">
+    <a href="#"><b>Sistem</b> Akademik</a>
+</div>    <div class="card">
       <div class="card-body login-card-body">
         <p class="login-box-msg">Masuk untuk memulai sesi</p>
+        <p class="text-center text-muted" style="font-size:13px">
+          Admin : Username Admin<br>
+          Guru : Username = Kode Guru<br>
+          Siswa : Username = NIS<br>
+          Password Default : 1234
+</p>
 
         <?php if ($err !== ''): ?>
           <div class="alert alert-danger" role="alert"><?= htmlspecialchars($err) ?></div>

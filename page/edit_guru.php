@@ -42,40 +42,65 @@ if (!$edit) {
 
 if (isset($_POST['tambah'])) {
 
-    $kd_guru        = mysqli_real_escape_string($koneksi, $_POST['kd_guru']);
-    $nm_guru        = mysqli_real_escape_string($koneksi, $_POST['nm_guru']);
-    $jenkel         = mysqli_real_escape_string($koneksi, $_POST['jenkel']);
-    $pend_terakhir  = mysqli_real_escape_string($koneksi, $_POST['pend_terakhir']);
-    $hp             = mysqli_real_escape_string($koneksi, $_POST['hp']);
-    $alamat         = mysqli_real_escape_string($koneksi, $_POST['alamat']);
+    $kd_guru       = mysqli_real_escape_string($koneksi, $_POST['kd_guru']);
+    $nm_guru       = mysqli_real_escape_string($koneksi, $_POST['nm_guru']);
+    $jenkel        = mysqli_real_escape_string($koneksi, $_POST['jenkel']);
+    $pend_terakhir = mysqli_real_escape_string($koneksi, $_POST['pend_terakhir']);
+    $hp            = mysqli_real_escape_string($koneksi, $_POST['hp']);
+    $alamat        = mysqli_real_escape_string($koneksi, $_POST['alamat']);
 
-    $update = mysqli_query($koneksi, "
-        UPDATE guru SET
-            nm_guru='$nm_guru',
-            jenkel='$jenkel',
-            pend_terakhir='$pend_terakhir',
-            hp='$hp',
-            alamat='$alamat'
-        WHERE kd_guru='$kd_guru'
-    ");
+    mysqli_begin_transaction($koneksi);
 
-    if ($update) {
+    try {
 
-        echo '<div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h5><i class="icon fas fa-check"></i> Berhasil</h5>
-                Data guru berhasil diubah.
-              </div>';
+        // Update tabel guru
+        $update = mysqli_query($koneksi, "
+            UPDATE guru SET
+                Nm_guru='$nm_guru',
+                Jenkel='$jenkel',
+                Pend_terakhir='$pend_terakhir',
+                Hp='$hp',
+                Alamat='$alamat'
+            WHERE Kd_guru='$kd_guru'
+        ");
+
+        if (!$update) {
+            throw new Exception(mysqli_error($koneksi));
+        }
+
+        // Update username di tabel users (aman walaupun kd_guru readonly)
+        $updateUser = mysqli_query($koneksi, "
+            UPDATE users
+            SET username='$kd_guru'
+            WHERE username='$kd'
+            AND role='guru'
+        ");
+
+        if (!$updateUser) {
+            throw new Exception(mysqli_error($koneksi));
+        }
+
+        mysqli_commit($koneksi);
+
+        echo '
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Berhasil</h5>
+            Data Guru berhasil diubah.
+        </div>';
 
         echo '<meta http-equiv="refresh" content="1;url=index.php?page=guru">';
 
-    } else {
+    } catch (Exception $e) {
 
-        echo '<div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h5><i class="icon fas fa-times"></i> Gagal</h5>'
-                . mysqli_error($koneksi) .
-              '</div>';
+        mysqli_rollback($koneksi);
+
+        echo '
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h5><i class="icon fas fa-times"></i> Gagal</h5>
+            '.$e->getMessage().'
+        </div>';
 
     }
 }
